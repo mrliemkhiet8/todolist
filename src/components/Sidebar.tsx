@@ -22,7 +22,7 @@ const Sidebar = () => {
   const [showProjectModal, setShowProjectModal] = useState(false);
   const location = useLocation();
   const { projects, currentProject, setCurrentProject, fetchProjects, tasks } = useTaskStore();
-  const { profile } = useAuthStore();
+  const { profile, user } = useAuthStore();
 
   useEffect(() => {
     fetchProjects();
@@ -186,14 +186,14 @@ const Sidebar = () => {
         <div className="p-4 border-t border-gray-200">
           <div className="flex items-center space-x-3">
             <img 
-              src={profile?.avatar_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${profile?.email}`} 
+              src={profile?.avatar_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user?.email}`} 
               alt="User"
               className="w-8 h-8 rounded-full"
             />
             {!isCollapsed && (
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-gray-900 truncate">{profile?.name}</p>
-                <p className="text-xs text-gray-500 truncate">{profile?.email}</p>
+                <p className="text-sm font-medium text-gray-900 truncate">{profile?.name || user?.email}</p>
+                <p className="text-xs text-gray-500 truncate">{user?.email}</p>
               </div>
             )}
           </div>

@@ -23,6 +23,8 @@ const SettingsPage = () => {
   const [activeTab, setActiveTab] = useState('profile');
   const [showApiKey, setShowApiKey] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  
+  // Theme and appearance state
   const [theme, setTheme] = useState(() => {
     return localStorage.getItem('taskflow_theme') || 'light';
   });
@@ -32,6 +34,7 @@ const SettingsPage = () => {
   const [compactMode, setCompactMode] = useState(() => {
     return localStorage.getItem('taskflow_compact_mode') === 'true';
   });
+  
   const [formData, setFormData] = useState({
     name: profile?.name || '',
     email: user?.email || '',
@@ -106,6 +109,17 @@ const SettingsPage = () => {
     localStorage.setItem('taskflow_accent_color', color);
     // Apply accent color to CSS variables
     document.documentElement.style.setProperty('--primary-color', color);
+    
+    // Update CSS custom properties for the new accent color
+    const root = document.documentElement;
+    root.style.setProperty('--tw-ring-color', color);
+    root.style.setProperty('--tw-border-color', color);
+    
+    // Update button colors
+    const buttons = document.querySelectorAll('.btn-primary');
+    buttons.forEach(button => {
+      (button as HTMLElement).style.backgroundColor = color;
+    });
   };
 
   const handleCompactModeChange = (enabled: boolean) => {
@@ -114,9 +128,22 @@ const SettingsPage = () => {
     // Apply compact mode class
     if (enabled) {
       document.documentElement.classList.add('compact-mode');
+      // Reduce padding and margins
+      document.documentElement.style.setProperty('--spacing-scale', '0.75');
     } else {
       document.documentElement.classList.remove('compact-mode');
+      document.documentElement.style.setProperty('--spacing-scale', '1');
     }
+  };
+
+  const handleSaveProfile = () => {
+    // In a real app, this would update the profile
+    alert('Profile updated successfully!');
+  };
+
+  const handleChangePhoto = () => {
+    // In a real app, this would open a file picker
+    alert('Photo upload feature would be implemented here');
   };
 
   const handleDeleteAccount = async () => {
@@ -232,7 +259,12 @@ const SettingsPage = () => {
             className="w-16 h-16 rounded-full"
           />
           <div>
-            <button className="btn-secondary">Change Photo</button>
+            <button 
+              onClick={handleChangePhoto}
+              className="btn-secondary"
+            >
+              Change Photo
+            </button>
             <p className="text-sm text-gray-500 mt-1">
               JPG, GIF or PNG. 1MB max.
             </p>
@@ -241,7 +273,10 @@ const SettingsPage = () => {
       </div>
 
       <div className="flex justify-end">
-        <button className="btn-primary flex items-center space-x-2">
+        <button 
+          onClick={handleSaveProfile}
+          className="btn-primary flex items-center space-x-2"
+        >
           <Save className="w-4 h-4" />
           <span>Save Changes</span>
         </button>

@@ -11,6 +11,7 @@ import {
   User,
   ChevronDown
 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../store/authStore';
 import { useTaskStore } from '../store/taskStore';
 import TaskModal from './TaskModal';
@@ -28,6 +29,7 @@ const Header = () => {
   
   const { user, profile, logout } = useAuthStore();
   const { currentProject, tasks, fetchTasks } = useTaskStore();
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Apply theme to document
@@ -75,6 +77,17 @@ const Header = () => {
 
   const toggleTheme = () => {
     setIsDarkMode(!isDarkMode);
+  };
+
+  const handleViewAllNotifications = () => {
+    setShowNotifications(false);
+    // Navigate to a dedicated notifications page or show a modal
+    alert('View all notifications feature - this would show a dedicated notifications page');
+  };
+
+  const handleSettingsClick = () => {
+    setShowUserMenu(false);
+    navigate('/dashboard/settings');
   };
 
   return (
@@ -158,7 +171,10 @@ const Header = () => {
                     ))}
                   </div>
                   <div className="p-4 text-center">
-                    <button className="text-blue-600 hover:text-blue-700 text-sm font-medium">
+                    <button 
+                      onClick={handleViewAllNotifications}
+                      className="text-blue-600 hover:text-blue-700 text-sm font-medium"
+                    >
                       View all notifications
                     </button>
                   </div>
@@ -192,11 +208,10 @@ const Header = () => {
                   className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-50"
                 >
                   <div className="p-2">
-                    <button className="w-full flex items-center space-x-2 px-3 py-2 text-left hover:bg-gray-100 rounded-lg transition-colors">
-                      <User className="w-4 h-4 text-gray-400" />
-                      <span className="text-sm text-gray-700">Profile</span>
-                    </button>
-                    <button className="w-full flex items-center space-x-2 px-3 py-2 text-left hover:bg-gray-100 rounded-lg transition-colors">
+                    <button 
+                      onClick={handleSettingsClick}
+                      className="w-full flex items-center space-x-2 px-3 py-2 text-left hover:bg-gray-100 rounded-lg transition-colors"
+                    >
                       <Settings className="w-4 h-4 text-gray-400" />
                       <span className="text-sm text-gray-700">Settings</span>
                     </button>
